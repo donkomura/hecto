@@ -27,7 +27,7 @@ impl Document {
             rows,
             file_name: Some(filename.to_string()),
             dirty: false,
-            file_type: file_type,
+            file_type,
         })
     }
     pub fn file_type(&self) -> String {

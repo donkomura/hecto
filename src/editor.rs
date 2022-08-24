@@ -151,7 +151,7 @@ impl Editor {
                     } else if moved {
                         editor.move_cursor(Key::Left);
                     }
-                    editor.document.highlight(Some(query));;;;
+                    editor.document.highlight(Some(query));
                 },
             )
             .unwrap_or(None);
@@ -210,7 +210,7 @@ impl Editor {
 
     fn scroll(&mut self) {
         let Position { x, y } = self.cursor_position;
-        let width = self.terminal.size().width as usize;
+        let width: usize = self.terminal.size().width as usize;
         let height = self.terminal.size().height as usize;
         let mut offset = &mut self.offset;
         if y < offset.y {
