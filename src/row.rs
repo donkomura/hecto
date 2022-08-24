@@ -105,7 +105,7 @@ impl Row {
 
     pub fn append(&mut self, new: &Self) {
         self.string = format!("{}{}", self.string, new.string);
-        self.len = new.len;
+        self.len += new.len;
     }
 
     pub fn split(&mut self, at: usize) -> Self {

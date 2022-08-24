@@ -77,20 +77,20 @@ impl Editor {
     pub fn run(&mut self) {
         loop {
             if let Err(error) = self.refresh_screen() {
-                die(&error);
+                die(error);
             }
             if self.should_quit {
                 break;
             }
             if let Err(error) = self.process_keypress() {
-                die(&error);
+                die(error);
             }
         }
     }
 
     fn refresh_screen(&self) -> Result<(), std::io::Error> {
         Terminal::cursor_hide();
-        Terminal::cursor_position(&Position { x: 0, y: 0 });
+        Terminal::cursor_position(&Position::default());
         if self.should_quit {
             Terminal::clear_screen();
             println!("Goodbye.\r");
@@ -181,7 +181,7 @@ impl Editor {
             Key::Ctrl('f') => self.search(),
             Key::Char(c) => {
                 self.document.insert(&self.cursor_position, c);
-                self.move_cursor(Key::Right)
+                self.move_cursor(Key::Right);
             },
             Key::Delete => self.document.delete(&self.cursor_position),
             Key::Backspace => {
@@ -210,7 +210,7 @@ impl Editor {
 
     fn scroll(&mut self) {
         let Position { x, y } = self.cursor_position;
-        let width: usize = self.terminal.size().width as usize;
+        let width = self.terminal.size().width as usize;
         let height = self.terminal.size().height as usize;
         let mut offset = &mut self.offset;
         if y < offset.y {
@@ -343,10 +343,12 @@ impl Editor {
             file_name.truncate(20);
         }
         status = format!(
-            "{} - {} lines{}",
+            "{} - {} lines{} ({}, {})",
             file_name,
             self.document.len(),
             modified_indicator,
+            self.cursor_position.x,
+            self.cursor_position.y,
         );
         let line_indicator = format!(
             "{} | {}/{}",
@@ -409,7 +411,7 @@ impl Editor {
     }
 }
 
-fn die(e: &std::io::Error) {
+fn die(e: std::io::Error) {
     Terminal::clear_screen();
-    panic!("{}", e);
+    panic!(e);
 }

@@ -67,8 +67,7 @@ impl Document {
         if c == '\n' {
             self.insert_newline(at);
             return;
-        }
-        if at.y == self.rows.len() {
+        } else if at.y == self.rows.len() {
             let mut row = Row::default();
             row.insert(0, c);
             self.rows.push(row);
